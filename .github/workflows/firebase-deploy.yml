@@ -8,11 +8,12 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Setup Node.js
+      - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: '18'
@@ -23,10 +24,10 @@ jobs:
       - name: Build project
         run: npm run build
 
-      - name: Deploy to Firebase
-        uses: w9jds/firebase-action@v13
+      - name: Deploy to Firebase Hosting
+        uses: FirebaseExtended/action-hosting-deploy@v0
         with:
-          credentials: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
-          project_id: medflux
-        env:
-          FIREBASE_CLI_EXPERIMENTS: hostingchannels
+          repoToken: "${{ secrets.GITHUB_TOKEN }}"
+          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT }}"
+          channelId: live
+          projectId: medflux
